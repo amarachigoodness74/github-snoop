@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Twitter, Github, Mail, Globe, Building, MapPin } from "lucide-react";
-import { IUserData } from "@/interfaces/user";
+import { motion } from "framer-motion";
+import { IUserData, Stat, StatType } from "@/interfaces/user";
+import UserStats from "@/components/UserStats";
 
 export default function PublicUser() {
   const [username, setUsername] = useState("");
   const [usersData, setUsersData] = useState<IUserData[]>([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<IUserData | null>(null);
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedStat, setSelectedStat] = useState<Stat | null>(null);
 
-  const handleSelectUser = (user: IUserData) => {
-    setSelectedUser(user);
+  // Function to handle stat selection
+  const handleSelectStat = (stat: Stat) => {
+    setSelectedStat(stat);
   };
 
   const fetchUserData = async () => {
@@ -26,7 +28,34 @@ export default function PublicUser() {
       const response = await fetch(`https://api.github.com/users/${username}`);
       if (!response.ok) throw new Error("User not found");
       const data: IUserData = await response.json();
-      setUsersData((usersData) => [data, ...usersData]);
+      const userData = {
+        id: data.id,
+        avatar_url: data.avatar_url,
+        name: data.name,
+        login: data.login,
+        created_at: data.created_at,
+        bio: data.bio,
+        email: data.email,
+        twitter_username: data.twitter_username,
+        blog: data.blog,
+        html_url: data.html_url,
+        company: data.company,
+        location: data.location,
+        followers: data.followers,
+        following: data.following,
+        public_repos: data.public_repos,
+        public_gists: data.public_gists,
+        events_url: data.events_url,
+        received_events_url: data.received_events_url,
+      };
+      // Save user to MongoDB
+      await fetch("/api/saveUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: userData }),
+      });
+      // Update local state
+      setUsersData((usersData) => [userData, ...usersData]);
       setError(null);
     } catch (err: any) {
       setError(err.message);
@@ -34,6 +63,23 @@ export default function PublicUser() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchStoredUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/getUsers");
+        const users = await response.json();
+        setUsersData(users);
+      } catch (error) {
+        console.error("Failed to load users:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStoredUsers();
+  }, []);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-6">
@@ -58,85 +104,219 @@ export default function PublicUser() {
 
       <hr className="border-dotted border-t-2 border-gray-400 w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] my-6" />
 
-      {usersData.length > 0 &&
-        usersData.map((userData) => (
-          <>
-            <div className="flex flex-col md:flex-row gap-6 w-[80vw]">
-              <div className="w-2/6">
-                <div className="bg-gray-800 p-6 rounded-lg text-center w-90">
-                  <img
-                    src={userData.avatar_url}
-                    alt="Avatar"
-                    className="w-24 h-24 rounded-full mx-auto"
-                  />
-                  <h2 className="text-xl mt-4">
-                    {userData.name || userData.login}
-                  </h2>
-                  <h4 className="text-sm font-semibold mb-4">
-                    Joined:
-                    {new Date(userData.created_at).toLocaleDateString()}
-                  </h4>
-                  <p className="text-sm text-gray-400">{userData.bio}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {usersData.length > 0 &&
+          usersData.map((userData) => (
+            <div
+              className="relative group bg-gray-800 p-6 rounded-lg text-center flex flex-col items-center justify-between w-full min-h-[300px] h-full"
+              key={userData.id}
+            >
+              {/* User Card */}
+              <div className="bg-gray-800 p-6 rounded-lg text-center group-hover:opacity-50 transition duration-300">
+                <img
+                  src={userData.avatar_url}
+                  alt="Avatar"
+                  className="w-24 h-24 rounded-full mx-auto"
+                />
+                <h2 className="text-xl mt-4">
+                  {userData.name || userData.login}
+                </h2>
+                <h4 className="text-sm font-semibold mb-4">
+                  Joined: {new Date(userData.created_at).toLocaleDateString()}
+                </h4>
+                <p className="text-sm text-gray-400">{userData.bio}</p>
 
-                  <div className="my-4 flex align-center justify-center gap-4 text-gray-400">
-                    {userData.email && (
-                      <a
-                        href={userData.email}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-blue-400"
-                      >
-                        <Mail className="w-6 h-6 hover:text-red-400" />
-                      </a>
-                    )}
-                    {userData.twitter_username && (
-                      <a
-                        href={userData.twitter_username}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-blue-400"
-                      >
-                        <Twitter className="w-6 h-6 hover:text-blue-700" />
-                      </a>
-                    )}
-                    {userData.blog && (
-                      <a
-                        href={userData.blog}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-blue-400"
-                      >
-                        <Globe className="w-6 h-6 hover:text-green-400" />
-                      </a>
-                    )}
-                    {userData.html_url && (
-                      <a
-                        href={userData.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-blue-400"
-                      >
-                        <Github className="w-6 h-6 hover:text-gray-400" />
-                      </a>
-                    )}
-                    {userData.company && (
-                      <span className="flex items-center hover:text-green-400">
-                        <Building className="w-6 h-6" />
-                        <span className="ml-2">{userData.company}</span>
-                      </span>
-                    )}
-                    {userData.location && (
-                      <span className="flex items-center hover:text-green-400">
-                        <MapPin className="w-6 h-6" />
-                        <span className="ml-2">{userData.location}</span>
-                      </span>
-                    )}
-                  </div>
+                <div className="my-4 flex align-center justify-center gap-4 text-gray-400">
+                  {userData.email && (
+                    <a
+                      href={`mailto:${userData.email}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-blue-400"
+                    >
+                      <Mail className="w-6 h-6 hover:text-red-400" />
+                    </a>
+                  )}
+                  {userData.twitter_username && (
+                    <a
+                      href={`https://twitter.com/${userData.twitter_username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-blue-400"
+                    >
+                      <Twitter className="w-6 h-6 hover:text-blue-700" />
+                    </a>
+                  )}
+                  {userData.blog && (
+                    <a
+                      href={userData.blog}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-blue-400"
+                    >
+                      <Globe className="w-6 h-6 hover:text-green-400" />
+                    </a>
+                  )}
+                  {userData.html_url && (
+                    <a
+                      href={userData.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-blue-400"
+                    >
+                      <Github className="w-6 h-6 hover:text-gray-400" />
+                    </a>
+                  )}
+                  {userData.company && (
+                    <span className="flex items-center hover:text-green-400">
+                      <Building className="w-6 h-6" />
+                      <span className="ml-2">{userData.company}</span>
+                    </span>
+                  )}
+                  {userData.location && (
+                    <span className="flex items-center hover:text-green-400">
+                      <MapPin className="w-6 h-6" />
+                      <span className="ml-2">{userData.location}</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* GitHub Stats - Initially Hidden, Shows on Hover */}
+              <div className="absolute top-0 left-0 right-0 bg-gray-800 p-6 rounded-lg w-full opacity-0 group-hover:opacity-100 transition duration-300">
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  GitHub Stats
+                </h3>
+                <div className="text-md text-gray-300 space-y-2">
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Follow,
+                        stat: "followers",
+                      })
+                    }
+                  >
+                    👥 Followers: {userData.followers}
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Follow,
+                        stat: "following",
+                      })
+                    }
+                  >
+                    🔄 Following: {userData.following}
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Repo,
+                        stat: "repos",
+                      })
+                    }
+                  >
+                    📂 Public Repos: {userData.public_repos}
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Gist,
+                        stat: "gists",
+                      })
+                    }
+                  >
+                    📝 Public Gists: {userData.public_gists}
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Repo,
+                        stat: "starred",
+                      })
+                    }
+                  >
+                    ⭐ Starred Repos
+                  </p>
+                  <p
+                    className="cursor-pointer hover:text-blue-400"
+                    onClick={() =>
+                      handleSelectStat({
+                        username: userData.login,
+                        type: StatType.Org,
+                        stat: "orgs",
+                      })
+                    }
+                  >
+                    🏢 Organizations
+                  </p>
+                  {userData.events_url && (
+                    <p
+                      className="cursor-pointer hover:text-blue-400"
+                      onClick={() =>
+                        handleSelectStat({
+                          username: userData.login,
+                          type: StatType.Event,
+                          stat: "events",
+                        })
+                      }
+                    >
+                      🏷️ Created Events
+                    </p>
+                  )}
+                  {userData.received_events_url && (
+                    <p
+                      className="cursor-pointer hover:text-blue-400"
+                      onClick={() =>
+                        handleSelectStat({
+                          username: userData.login,
+                          type: StatType.Event,
+                          stat: "received_events",
+                        })
+                      }
+                    >
+                      🏷️ Received Events
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-          </>
-        ))}
+          ))}
+      </div>
+
+      {/* {selectedStat && (
+        <div className="w-4/6">
+          <UserStats selectedStat={selectedStat} />
+        </div>
+      )} */}
+      {selectedStat && (
+        <motion.div
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "100%" }}
+          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          className="fixed top-0 right-0 w-4/6 h-full bg-gray-900 shadow-lg p-6 z-50"
+        >
+          <button
+            className="absolute top-4 right-4 text-white text-xl"
+            onClick={() => setSelectedStat(null)}
+          >
+            ✖
+          </button>
+
+          <UserStats selectedStat={selectedStat} />
+        </motion.div>
+      )}
     </div>
   );
 }
