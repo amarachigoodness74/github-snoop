@@ -1,36 +1,42 @@
-import { useEffect, useState } from "react";
+import { IUserData } from "@/interfaces/user";
 
-const FollowData = ({ url }: { url: string }) => {
-  const [statData, setStatData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+const UserData = ({
+  statData,
+  title,
+}: {
+  statData: IUserData[];
+  title: string;
+}) => {
+  return (
+    <>
+      <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {statData.map((userData) => (
+          <div
+            key={userData.id}
+            className="bg-gray-700 text-center p-4 mx-auto w-full"
+          >
+            <img
+              src={userData.avatar_url}
+              alt="Avatar"
+              className="w-20 h-20 rounded-full mx-auto"
+            />
 
-  const fetchStatData = async () => {
-    if (!url) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`${url}`);
-      if (!response.ok) throw new Error("There was an error");
-      const data = await response.json();
-      console.log("==============", data);
-      setStatData(data);
-      setError(null);
-    } catch (err: any) {
-      setError(err.message);
-      setStatData(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchStatData();
-  }, [url]);
-
-  return <div className="flex flex-col md:flex-row gap-6"></div>;
+            <div className="my-2 text-center">
+              <a
+                href={userData.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block text-blue-400"
+              >
+                <h2 className="text-lg">{userData.name || userData.login}</h2>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 };
 
-export default FollowData;
+export default UserData;

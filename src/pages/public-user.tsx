@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Twitter, Github, Mail, Globe, Building, MapPin } from "lucide-react";
-import { IUserData, Stat } from "@/interfaces/user";
-import UserProfile from "@/components/UserModel";
+import { IUserData, Stat, StatType } from "@/interfaces/user";
 import UserStats from "@/components/UserStats";
 
 const PublicUser = () => {
@@ -12,10 +11,7 @@ const PublicUser = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const [selectedStat, setSelectedStat] = useState<Stat>({
-    type: "follow",
-    url: userData?.followers_url || "",
-  });
+  const [selectedStat, setSelectedStat] = useState<Stat | null>(null);
 
   // Function to handle stat selection
   const handleSelectStat = (stat: Stat) => {
@@ -32,9 +28,13 @@ const PublicUser = () => {
       const response = await fetch(`https://api.github.com/users/${username}`);
       if (!response.ok) throw new Error("User not found");
       const data: IUserData = await response.json();
-      console.log("==============", data);
       setUserData(data);
       setError(null);
+      setSelectedStat({
+        type: StatType.Follow,
+        username,
+        stat: "followers",
+      });
     } catch (err: any) {
       setError(err.message);
       setUserData(null);
@@ -57,6 +57,7 @@ const PublicUser = () => {
         <button
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-r-lg"
           onClick={fetchUserData}
+          disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
         </button>
@@ -65,11 +66,11 @@ const PublicUser = () => {
 
       {userData && (
         <>
-          <hr className="border-dotted border-t-2 border-gray-400 w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] my-4" />
+          <hr className="border-dotted border-t-2 border-gray-400 w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] my-6" />
 
           <div className="flex flex-col md:flex-row gap-6 w-[80vw]">
-            <div className="w-1/3">
-              <div className="bg-gray-800 p-6 rounded-lg text-center w-80">
+            <div className="w-2/6">
+              <div className="bg-gray-800 p-6 rounded-lg text-center w-90">
                 <img
                   src={userData.avatar_url}
                   alt="Avatar"
@@ -80,9 +81,9 @@ const PublicUser = () => {
                 </h2>
                 <h4 className="text-sm font-semibold mb-4">
                   Joined:
-                  {userData.created_at}
+                  {new Date(userData.created_at).toLocaleDateString()}
                 </h4>
-                <p className="text-gray-400">{userData.bio}</p>
+                <p className="text-sm text-gray-400">{userData.bio}</p>
 
                 <div className="my-4 flex align-center justify-center gap-4 text-gray-400">
                   {userData.email && (
@@ -140,17 +141,18 @@ const PublicUser = () => {
                 </div>
               </div>
 
-              <div className="mt-6 bg-gray-800 p-6 rounded-lg w-80">
+              <div className="mt-6 bg-gray-800 p-6 rounded-lg w-90">
                 <h3 className="text-lg font-semibold text-white mb-4">
                   GitHub Stats
                 </h3>
-                <div className="text-sm text-gray-300 space-y-2">
+                <div className="text-md text-gray-300 space-y-2">
                   <p
                     className="cursor-pointer hover:text-blue-400"
                     onClick={() =>
                       handleSelectStat({
-                        url: userData.followers_url,
-                        type: "follow",
+                        username,
+                        type: StatType.Follow,
+                        stat: "followers",
                       })
                     }
                   >
@@ -160,8 +162,9 @@ const PublicUser = () => {
                     className="cursor-pointer hover:text-blue-400"
                     onClick={() =>
                       handleSelectStat({
-                        url: userData.following_url,
-                        type: "follow",
+                        username,
+                        type: StatType.Follow,
+                        stat: "following",
                       })
                     }
                   >
@@ -169,26 +172,24 @@ const PublicUser = () => {
                   </p>
                   <p
                     className="cursor-pointer hover:text-blue-400"
-                    onClick={
-                      () =>
-                        handleSelectStat({
-                          url: userData.following_url,
-                          type: "follow",
-                        })
-                      // handleSelectStat(userData.repos_url)
+                    onClick={() =>
+                      handleSelectStat({
+                        username,
+                        type: StatType.Repo,
+                        stat: "repos",
+                      })
                     }
                   >
                     📂 Public Repos: {userData.public_repos}
                   </p>
                   <p
                     className="cursor-pointer hover:text-blue-400"
-                    onClick={
-                      () =>
-                        handleSelectStat({
-                          url: userData.following_url,
-                          type: "follow",
-                        })
-                      // handleSelectStat(userData.gists_url)
+                    onClick={() =>
+                      handleSelectStat({
+                        username,
+                        type: StatType.Gist,
+                        stat: "gists",
+                      })
                     }
                   >
                     📝 Public Gists: {userData.public_gists}
@@ -198,32 +199,48 @@ const PublicUser = () => {
                     className="cursor-pointer hover:text-blue-400"
                     onClick={() =>
                       handleSelectStat({
-                        url: userData.following_url,
-                        type: "follow",
+                        username,
+                        type: StatType.Repo,
+                        stat: "starred",
                       })
                     }
-                    // onClick={() => handleSelectStat(userData.starred_url)}
                   >
-                    ⭐ Starred URLs
+                    ⭐ Starred Repos
                   </p>
                   <p
                     className="cursor-pointer hover:text-blue-400"
                     onClick={() =>
                       handleSelectStat({
-                        url: userData.organizations_ur,
-                        type: "repo",
+                        username,
+                        type: StatType.Org,
+                        stat: "orgs",
                       })
                     }
                   >
                     🏢 Organizations
                   </p>
+                  {userData.events_url && (
+                    <p
+                      className="cursor-pointer hover:text-blue-400"
+                      onClick={() =>
+                        handleSelectStat({
+                          username,
+                          type: StatType.Event,
+                          stat: "events",
+                        })
+                      }
+                    >
+                      🏷️ Created Events
+                    </p>
+                  )}
                   {userData.received_events_url && (
                     <p
                       className="cursor-pointer hover:text-blue-400"
                       onClick={() =>
                         handleSelectStat({
-                          url: userData.received_events_url || "",
-                          type: "repo",
+                          username,
+                          type: StatType.Event,
+                          stat: "received_events",
                         })
                       }
                     >
@@ -235,7 +252,9 @@ const PublicUser = () => {
             </div>
 
             {userData && selectedStat && (
-              <UserStats selectedStat={selectedStat} />
+              <div className="w-4/6">
+                <UserStats selectedStat={selectedStat} />
+              </div>
             )}
           </div>
         </>

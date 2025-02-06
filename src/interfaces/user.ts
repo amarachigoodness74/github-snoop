@@ -1,4 +1,5 @@
 export interface IUserData {
+  id: string;
   name: string;
   login: string;
   avatar_url: string;
@@ -22,11 +23,21 @@ export interface IUserData {
   url?: string;
   user_view_type?: string;
   received_events_url?: string;
+  events_url?: string;
   created_at: string;
   updated_at: string;
 }
 
+export enum StatType {
+  Follow = "follow",
+  Repo = "repo",
+  Event = "event",
+  Gist = "gist",
+  Org = "organization",
+}
+
 export type Stat = {
-  type: string;
-  url: string
+  stat: string;
+  type: StatType;
+  username: string;
 };

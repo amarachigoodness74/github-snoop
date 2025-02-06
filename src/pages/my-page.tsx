@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { Twitter, Github, Mail, Globe, Building, MapPin } from "lucide-react";
 import { IUserData } from "@/interfaces/user";
-import UserProfile from "@/components/UserModel";
 
 export default function PublicUser() {
   const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [usersData, setUsersData] = useState<IUserData[]>([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUserData | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleSelectUser = (user: IUserData) => {
+    setSelectedUser(user);
+  };
 
   const fetchUserData = async () => {
     if (!username) return;
@@ -22,13 +25,11 @@ export default function PublicUser() {
     try {
       const response = await fetch(`https://api.github.com/users/${username}`);
       if (!response.ok) throw new Error("User not found");
-      const data = await response.json();
-      console.log("==============", data);
-      setUserData(data);
+      const data: IUserData = await response.json();
+      setUsersData((usersData) => [data, ...usersData]);
       setError(null);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
-      setUserData(null);
     } finally {
       setLoading(false);
     }
@@ -48,14 +49,94 @@ export default function PublicUser() {
         <button
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-r-lg"
           onClick={fetchUserData}
+          disabled={loading}
         >
           {loading ? "Loading..." : "Search"}
         </button>
       </div>
       {error && <p className="text-red-500">{error}</p>}
 
-      <hr className="border-dotted border-t-2 border-gray-400 w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] my-4" />
-      {userData && <UserProfile userData={userData} />}
+      <hr className="border-dotted border-t-2 border-gray-400 w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] my-6" />
+
+      {usersData.length > 0 &&
+        usersData.map((userData) => (
+          <>
+            <div className="flex flex-col md:flex-row gap-6 w-[80vw]">
+              <div className="w-2/6">
+                <div className="bg-gray-800 p-6 rounded-lg text-center w-90">
+                  <img
+                    src={userData.avatar_url}
+                    alt="Avatar"
+                    className="w-24 h-24 rounded-full mx-auto"
+                  />
+                  <h2 className="text-xl mt-4">
+                    {userData.name || userData.login}
+                  </h2>
+                  <h4 className="text-sm font-semibold mb-4">
+                    Joined:
+                    {new Date(userData.created_at).toLocaleDateString()}
+                  </h4>
+                  <p className="text-sm text-gray-400">{userData.bio}</p>
+
+                  <div className="my-4 flex align-center justify-center gap-4 text-gray-400">
+                    {userData.email && (
+                      <a
+                        href={userData.email}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-blue-400"
+                      >
+                        <Mail className="w-6 h-6 hover:text-red-400" />
+                      </a>
+                    )}
+                    {userData.twitter_username && (
+                      <a
+                        href={userData.twitter_username}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-blue-400"
+                      >
+                        <Twitter className="w-6 h-6 hover:text-blue-700" />
+                      </a>
+                    )}
+                    {userData.blog && (
+                      <a
+                        href={userData.blog}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-blue-400"
+                      >
+                        <Globe className="w-6 h-6 hover:text-green-400" />
+                      </a>
+                    )}
+                    {userData.html_url && (
+                      <a
+                        href={userData.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-blue-400"
+                      >
+                        <Github className="w-6 h-6 hover:text-gray-400" />
+                      </a>
+                    )}
+                    {userData.company && (
+                      <span className="flex items-center hover:text-green-400">
+                        <Building className="w-6 h-6" />
+                        <span className="ml-2">{userData.company}</span>
+                      </span>
+                    )}
+                    {userData.location && (
+                      <span className="flex items-center hover:text-green-400">
+                        <MapPin className="w-6 h-6" />
+                        <span className="ml-2">{userData.location}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        ))}
     </div>
   );
 }
