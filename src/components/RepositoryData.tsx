@@ -1,15 +1,8 @@
 import { IRepo } from "@/interfaces/repo";
 
-const RepoData = ({
-  statData,
-  title,
-}: {
-  statData: IRepo[];
-  title: string;
-}) => {
+const RepoData = ({ statData }: { statData: IRepo[] }) => {
   return (
-    <div className="overflow-x-auto">
-      <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+    <div className="overflow-auto">
       <table className="min-w-full bg-gray-800 text-white border border-gray-700 rounded-lg">
         <thead>
           <tr className="bg-gray-900 text-left text-sm">
