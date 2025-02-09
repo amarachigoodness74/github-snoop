@@ -1,40 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# GitHub Snoop
 
-## Getting Started
+**Track and Explore GitHub Users Effortlessly**
 
-First, run the development server:
+![screencapture-github-snoop-vercel-app-my-page-2025-02-09-20_18_33](https://github.com/user-attachments/assets/2d4b3130-a3c6-497e-9905-c6154dd02297)
 
-```bash
+🚀 **Live Demo:** [GitHub Snoop](https://github-snoop.vercel.app)  
+📂 **GitHub Repository:** [github.com/amarachigoodness74/github-snoop](https://github.com/amarachigoodness74/github-snoop)
+
+---
+
+## 📖 Overview
+
+**GitHub Snoop** is a sleek web application that allows users to search and explore **GitHub profiles**. It fetches and displays essential details about any GitHub user, including their repositories, followers, and more.
+
+### 🔹 Built With:
+- ⚛️ **Next.js** – Powerful React framework  
+- 🔷 **TypeScript** – Type-safe development  
+- 🎨 **TailwindCSS** – Modern styling  
+- 🔌 **GitHub API** – Fetch real-time GitHub data  
+- 🔐 **NextAuth.js** – Secure GitHub authentication  
+
+---
+
+## 🚀 Features
+
+✔️ **GitHub Authentication** – Sign in securely using GitHub  
+✔️ **User Search** – Enter a username to fetch user details  
+✔️ **Profile Details** – View repositories, followers, and more  
+✔️ **History Tracking** – Saves search history for authenticated users  
+✔️ **Pagination** – Efficiently loads data with infinite scrolling  
+✔️ **Responsive UI** – Optimized for all screen sizes  
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1️⃣ Clone the Repository
+```sh
+git clone https://github.com/amarachigoodness74/github-snoop.git
+cd github-snoop
+```
+
+### 2️⃣ Install Dependencies
+```sh
+npm install
+# or
+yarn install
+```
+
+### 3️⃣ Set Up Environment Variables
+Create a `.env.local` file and add:  
+```sh
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+MONGODB_URI=your_mongodb_connection_string
+```
+
+### 4️⃣ Run the Development Server
+```sh
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+App will be available at **http://localhost:3000** 🚀
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 📸 Screenshots
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+| 🔍 Search & Results | 🖥️ Profile Page |
+|----------------|--------------|
+| ![Search](https://github.com/amarachigoodness74/github-snoop/raw/main/screenshots/search.png) | ![Profile](https://github.com/amarachigoodness74/github-snoop/raw/main/screenshots/profile.png) |
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📜 API Usage
 
-## Learn More
+This app fetches data from the **GitHub API**. API rate limits apply, so ensure authentication for extended limits.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+## 🛠️ Future Improvements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🚀 **Dark Mode Support**  
+📊 **More GitHub Stats (Contributions, Languages, etc.)**  
+🔄 **Refine Search & Filtering**  
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 💡 Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+🙌 Contributions are welcome! Feel free to submit issues and pull requests.
+
+1. **Fork the repo**  
+2. **Create a new branch** (`feature-branch`)  
+3. **Commit changes** (`git commit -m "Add new feature"`)  
+4. **Push branch** (`git push origin feature-branch`)  
+5. **Create a Pull Request**  
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+### 📬 Connect with Me
+
+💻 **Portfolio:** [amarachigoodness74.vercel.app](https://amarachigoodness74.vercel.app)  
+🐦 **Twitter/X:** [@amarachigoodness](https://twitter.com/amarachigoodness)  
+🔗 **LinkedIn:** [Amarachi Goodness](https://www.linkedin.com/in/amarachigoodness)  
+
+---
