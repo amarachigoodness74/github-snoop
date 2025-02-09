@@ -1,7 +1,8 @@
 import React from "react";
 
 import clsx from "clsx";
-import { GroupName, IUserData, Stat, StatType } from "@/interfaces/user";
+import { IUserData } from "@/interfaces/user";
+import { GroupName, Stat, StatType } from "@/interfaces/others";
 
 const GitHubStats = ({
   userData,

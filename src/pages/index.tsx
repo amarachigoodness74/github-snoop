@@ -1,3 +1,4 @@
+import LogoutBtn from "@/components/LogoutBtn";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
@@ -9,17 +10,12 @@ export default function Home() {
       {session ? (
         <div>
           <p>Signed in as {session.user?.email}</p>
-          <button
-            onClick={() => signOut()}
-            className="px-4 py-2 bg-red-500 text-white rounded"
-          >
-            Sign out
-          </button>
+          <LogoutBtn />
         </div>
       ) : (
         <>
           <button
-            onClick={() => signIn("github")}
+            onClick={() => signIn("github", { callbackUrl: "/my-page" })}
             className="px-4 py-2 bg-purple-500 text-white rounded"
           >
             Sign in with GitHub

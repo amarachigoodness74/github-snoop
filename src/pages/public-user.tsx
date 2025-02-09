@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IUserData, Stat, StatType } from "@/interfaces/user";
+import { IUserData } from "@/interfaces/user";
+import { GroupName, Stat, StatType } from "@/interfaces/others";
 import UserStats from "@/components/UserStats";
 import Line from "@/components/Line";
 import GitHubSearch from "@/components/GitHubSearch";
@@ -14,19 +15,19 @@ const PublicUser = () => {
   const [userData, setUserData] = useState<IUserData | null>(null);
   const [selectedStat, setSelectedStat] = useState<Stat | null>(null);
 
-  // Function to handle stat selection
   const handleSelectStat = (stat: Stat) => {
     setSelectedStat(stat);
   };
 
   const title: string =
-      statToTitle[selectedStat?.stat as keyof typeof statToTitle];
+    statToTitle[selectedStat?.stat as keyof typeof statToTitle];
 
   useEffect(() => {
     handleSelectStat({
-      type: StatType.Follow,
       username,
+      type: StatType.Follow,
       stat: "followers",
+      group: GroupName.Card,
     });
   }, [userData]);
 

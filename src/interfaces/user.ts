@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IUserData {
   id: string;
   name: string;
@@ -19,22 +20,8 @@ export interface IUserData {
   created_at: string;
 }
 
-export enum StatType {
-  Follow = "follow",
-  Repo = "repo",
-  Event = "event",
-  Gist = "gist",
-  Org = "organization",
+export interface IUsersResponse {
+  users: IUserData[];
+  totalUsers: number;
+  hasMore: boolean;
 }
-
-export enum GroupName {
-  Card = "card",
-  Table = "table",
-}
-
-export type Stat = {
-  stat: string;
-  type: StatType;
-  username: string;
-  group?: GroupName;
-};

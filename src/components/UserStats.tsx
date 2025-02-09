@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import RepoData from "./RepositoryData";
 import FollowData from "./FollowData";
-import { GroupName, Stat } from "@/interfaces/user";
+import { GroupName, Stat } from "@/interfaces/others";
 import EventData from "./EventData";
 import GistData from "./GistData";
 import OrganizationData from "./OrganizationData";
-import { fetchUserStats } from "@/lib/useUsersHook";
-import { statToTitle } from "@/lib/utils";
+import { fetchUserStats, statToTitle } from "@/lib/utils";
 
 const typeToComponent = {
   repo: RepoData,
