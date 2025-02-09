@@ -37,19 +37,16 @@ export default NextAuth({
       return true;
     },
     async session({ session, token }) {
-      if (token?.username) {
-        session.user.username = token.username;
+      if (token?.username && session.user) {
+        session.user.email = token.email;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.username = user.login;
+        token.email = user.email;
       }
       return token;
-    },
-    async redirect({ url, baseUrl }) {
-      return `${baseUrl}/my-page`;
     },
   },
 });

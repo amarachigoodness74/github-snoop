@@ -13,14 +13,16 @@ export const statToTitle = {
 
 export const fetchUsers = async ({
   pageParam,
+  limit,
   search,
 }: {
   pageParam: number;
+  limit: number;
   search: string;
 }): Promise<IUsersResponse> => {
   try {
     const res = await fetch(
-      `/api/getUsers?page=${pageParam}&limit=10&search=${search}`
+      `/api/getUsers?page=${pageParam}&limit=${limit}&search=${search}`
     );
     return res.json();
   } catch (error: any) {

@@ -1,5 +1,5 @@
 import LogoutBtn from "@/components/LogoutBtn";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function Home() {

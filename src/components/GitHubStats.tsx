@@ -7,14 +7,22 @@ import { GroupName, Stat, StatType } from "@/interfaces/others";
 const GitHubStats = ({
   userData,
   handleSelectStat,
+  onHoverLeave,
   className = "",
 }: {
   userData: IUserData;
   handleSelectStat: (stat: Stat) => void;
+  onHoverLeave: () => void;
   className?: string;
 }) => {
   return (
-    <div className={clsx("bg-gray-800 p-6 rounded-lg", className)}>
+    <div
+      className={clsx(
+        "bg-gray-800 p-6 rounded-lg w-full min-h-[300px] h-full",
+        className
+      )}
+      onMouseLeave={onHoverLeave}
+    >
       <h3 className="text-lg font-semibold text-white mb-4">GitHub Stats</h3>
       <div className="text-md text-gray-300 space-y-2">
         <p

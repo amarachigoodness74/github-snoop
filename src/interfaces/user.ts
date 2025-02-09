@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IUserData {
   id: string;
   name: string;
@@ -24,4 +23,13 @@ export interface IUsersResponse {
   users: IUserData[];
   totalUsers: number;
   hasMore: boolean;
+}
+
+export interface IUserSession {
+  user: {
+    name: string;
+    email: string;
+    image: string;
+  };
+  expires: string;
 }

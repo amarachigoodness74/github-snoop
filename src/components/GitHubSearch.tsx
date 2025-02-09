@@ -5,9 +5,15 @@ type HeaderProps = {
   username: string;
   setUserData: (userData: IUserData | null) => void;
   setUsername: (username: string) => void;
+  saving?: boolean;
 };
 
-const GitHubSearch = ({ username, setUserData, setUsername }: HeaderProps) => {
+const GitHubSearch = ({
+  username,
+  setUserData,
+  setUsername,
+  saving,
+}: HeaderProps) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -45,9 +51,9 @@ const GitHubSearch = ({ username, setUserData, setUsername }: HeaderProps) => {
         <button
           className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-r-lg"
           onClick={fetchUserData}
-          disabled={loading}
+          disabled={loading || saving}
         >
-          {loading ? "Loading..." : "Search"}
+          {loading ? "Loading..." : saving ? "Saving..." : "Search"}
         </button>
       </div>
       {error && <p className="text-red-500">{error}</p>}

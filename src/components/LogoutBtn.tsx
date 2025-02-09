@@ -6,10 +6,10 @@ const LogoutBtn = () => {
   return (
     <>
       {session && (
-        <div className="px-4 py-2 bg-red-500 text-white rounded">
+        <div className="bg-red-500 text-white rounded">
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="px-4 py-2 bg-red-500 text-white rounded"
+            className="px-2 py-1 bg-red-500 text-white rounded"
           >
             Sign out
           </button>

@@ -5,20 +5,30 @@ import { IUserData } from "@/interfaces/user";
 
 const UserCard = ({
   userData,
+  onHoverEnter,
   className = "",
 }: {
   userData: IUserData;
+  onHoverEnter: () => void;
   className?: string;
 }) => {
   return (
     <>
-      <div className="bg-gray-800 p-6 rounded-lg text-center">
+      <div
+        className={clsx(
+          "relative bg-gray-800 p-6 rounded-lg text-center",
+          className
+        )}
+      >
         <img
           src={userData.avatar_url}
           alt="Avatar"
           className="w-24 h-24 rounded-full mx-auto"
         />
         <h2 className="text-xl mt-4">{userData.name || userData.login}</h2>
+        {userData.name && (
+          <span className="text-xs mt-2">{userData.login}</span>
+        )}
         <h4 className="text-sm font-semibold mb-4">
           Joined: {new Date(userData.created_at).toLocaleDateString()}
         </h4>
@@ -86,14 +96,16 @@ const UserCard = ({
             </span>
           )}
         </div>
+
+        {className && (
+          <button
+            onMouseEnter={onHoverEnter}
+            className="bg-gray-900 p-2 rounded text-center text-gray-300 text-sm"
+          >
+            More Stats
+          </button>
+        )}
       </div>
-      {className && (
-        <button
-          className={clsx("bg-green-800 p-4 rounded-lg text-center", className)}
-        >
-          More Stats
-        </button>
-      )}
     </>
   );
 };
