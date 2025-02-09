@@ -9,7 +9,7 @@ const UserCard = ({
   className = "",
 }: {
   userData: IUserData;
-  onHoverEnter: () => void;
+  onHoverEnter?: () => void;
   className?: string;
 }) => {
   return (

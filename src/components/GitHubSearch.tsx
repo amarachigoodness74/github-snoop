@@ -14,7 +14,7 @@ const GitHubSearch = ({
   setUsername,
   saving,
 }: HeaderProps) => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchUserData = async () => {
@@ -29,8 +29,13 @@ const GitHubSearch = ({
       const data: IUserData = await response.json();
       setUserData(data);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        console.error("An unknown error occurred:", error);
+        setError("An unknown error occurred");
+      }
       setUserData(null);
     } finally {
       setLoading(false);

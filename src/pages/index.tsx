@@ -9,7 +9,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 bg-gray-900">
       {session ? (
         <div>
-          <p>Signed in as {session.user?.email}</p>
+          <p className="mb-4">Signed in as {session.user?.email}</p>
           <LogoutBtn />
         </div>
       ) : (

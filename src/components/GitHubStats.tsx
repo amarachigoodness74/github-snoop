@@ -12,7 +12,7 @@ const GitHubStats = ({
 }: {
   userData: IUserData;
   handleSelectStat: (stat: Stat) => void;
-  onHoverLeave: () => void;
+  onHoverLeave?: () => void;
   className?: string;
 }) => {
   return (
