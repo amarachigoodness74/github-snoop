@@ -2,7 +2,8 @@
 
 **Track and Explore GitHub Users Effortlessly**
 
-![screencapture-github-snoop-vercel-app-my-page-2025-02-09-20_18_33](https://github.com/user-attachments/assets/2d4b3130-a3c6-497e-9905-c6154dd02297)
+![screencapture-localhost-3000-my-page-2025-02-09-20_28_54](https://github.com/user-attachments/assets/2642e8bc-9ca4-46ae-a02b-5970e02dd477)
+![screencapture-localhost-3000-my-page-2025-02-09-20_28_26](https://github.com/user-attachments/assets/5d4886aa-28ab-42d4-b824-d680d09f6be9)
 
 🚀 **Live Demo:** [GitHub Snoop](https://github-snoop.vercel.app)  
 📂 **GitHub Repository:** [github.com/amarachigoodness74/github-snoop](https://github.com/amarachigoodness74/github-snoop)
@@ -65,14 +66,6 @@ npm run dev
 yarn dev
 ```
 App will be available at **http://localhost:3000** 🚀
-
----
-
-## 📸 Screenshots
-
-| 🔍 Search & Results | 🖥️ Profile Page |
-|----------------|--------------|
-| ![Search](https://github.com/amarachigoodness74/github-snoop/raw/main/screenshots/search.png) | ![Profile](https://github.com/amarachigoodness74/github-snoop/raw/main/screenshots/profile.png) |
 
 ---
 
