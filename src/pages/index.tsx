@@ -10,6 +10,14 @@ export default function Home() {
       {session ? (
         <div>
           <p className="mb-4">Signed in as {session.user?.email}</p>
+          <div className="flex align-center justify-center my-3 w-auto">
+            <Link
+              href="/my-page"
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              My Page
+            </Link>
+          </div>
           <LogoutBtn />
         </div>
       ) : (

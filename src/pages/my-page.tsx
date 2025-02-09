@@ -58,7 +58,7 @@ const UsersPage = () => {
     isLoading: infiniteLoading,
   } = useInfiniteQuery({
     queryKey: ["users", search],
-    queryFn: ({ pageParam = 1 }) => fetchUsers({ pageParam, limit: 2, search }),
+    queryFn: ({ pageParam = 1 }) => fetchUsers({ pageParam, limit: 12, search }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.hasMore ? allPages.length + 1 : undefined;
