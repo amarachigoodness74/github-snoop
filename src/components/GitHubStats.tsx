@@ -17,10 +17,7 @@ const GitHubStats = ({
 }) => {
   return (
     <div
-      className={clsx(
-        "bg-gray-800 p-6 rounded-lg w-full min-h-[300px] h-full",
-        className
-      )}
+      className={clsx("bg-gray-800 p-6 rounded-lg w-full", className)}
       onMouseLeave={onHoverLeave}
     >
       <h3 className="text-lg font-semibold text-white mb-4">GitHub Stats</h3>

@@ -6,7 +6,7 @@ const RepoData = ({ statData }: { statData: IRepo[] }) => {
       <table className="min-w-full bg-gray-800 text-white border border-gray-700 rounded-lg">
         <thead>
           <tr className="bg-gray-900 text-left text-sm">
-            <th className="p-2">Name</th>
+            <th className="p-2 min-w-[120px]">Name</th>
             <th className="p-2">Owner</th>
             <th className="p-2">Stars</th>
             <th className="p-2">Forks</th>

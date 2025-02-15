@@ -9,6 +9,8 @@ import GitHubSearch from "@/components/GitHubSearch";
 import UserCard from "@/components/UserCard";
 import GitHubStats from "@/components/GitHubStats";
 import { statToTitle } from "@/lib/utils";
+import SlideUserStats from "@/components/SlideUserStats";
+import ScrollToTop from "@/components/ScroolToTopBtn";
 
 const PublicUser = () => {
   const [username, setUsername] = useState("");
@@ -23,6 +25,9 @@ const PublicUser = () => {
     statToTitle[selectedStat?.stat as keyof typeof statToTitle];
 
   useEffect(() => {
+    const isMdScreen = window.matchMedia("(min-width: 768px)").matches;
+    if (!isMdScreen) return; // Run only on md: and larger
+
     handleSelectStat({
       username,
       type: StatType.Follow,
@@ -43,8 +48,8 @@ const PublicUser = () => {
         <>
           <Line />
 
-          <div className="flex flex-col md:flex-row gap-6 w-[80vw]">
-            <div className="w-2/6">
+          <div className="flex flex-col gap-6 w-[80vw] md:flex-row w-full">
+            <div className="w-full md:w-2/6 md:sticky md:top-0 md:h-screen md:overflow-y-auto">
               <UserCard userData={userData} />
 
               <GitHubStats
@@ -53,13 +58,26 @@ const PublicUser = () => {
                 className="mt-6 w-90"
               />
             </div>
+            <ScrollToTop />
 
+            {/* Larger Device */}
             {userData && selectedStat && (
-              <div className="w-4/6">
+              <div className="hidden md:block w-full md:w-4/6 overflow-y-auto">
                 <h3 className="text-lg font-semibold text-white mb-4 py-2">
                   {title}
                 </h3>
                 <UserStats selectedStat={selectedStat} />
+              </div>
+            )}
+
+            {/* Mobile Device */}
+            {selectedStat && (
+              <div className="md:hidden">
+                <SlideUserStats
+                  title={title}
+                  selectedStat={selectedStat}
+                  setSelectedStat={setSelectedStat}
+                />
               </div>
             )}
           </div>

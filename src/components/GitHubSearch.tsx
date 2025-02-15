@@ -1,4 +1,5 @@
 import { IUserData } from "@/interfaces/user";
+import Link from "next/link";
 import React, { useState } from "react";
 
 type HeaderProps = {
@@ -44,7 +45,9 @@ const GitHubSearch = ({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">GitHub Snoop</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        <Link href="/">GitHub Snoop</Link>
+      </h1>
       <div className="flex mb-6 w-[90vw] sm:w-[90vw] md:w-[60vw] lg:w-[50vw]">
         <input
           type="text"

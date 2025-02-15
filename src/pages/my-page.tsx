@@ -18,6 +18,8 @@ import UserCard from "@/components/UserCard";
 import GitHubStats from "@/components/GitHubStats";
 import { addUser, fetchUsers, statToTitle } from "@/lib/utils";
 import LogoutBtn from "@/components/LogoutBtn";
+import SlideUserStats from "@/components/SlideUserStats";
+import ScrollToTop from "@/components/ScroolToTopBtn";
 
 const UsersPage = () => {
   const { data: session, status } = useSession();
@@ -58,7 +60,8 @@ const UsersPage = () => {
     isLoading: infiniteLoading,
   } = useInfiniteQuery({
     queryKey: ["users", search],
-    queryFn: ({ pageParam = 1 }) => fetchUsers({ pageParam, limit: 12, search }),
+    queryFn: ({ pageParam = 1 }) =>
+      fetchUsers({ pageParam, limit: 12, search }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.hasMore ? allPages.length + 1 : undefined;
@@ -110,7 +113,7 @@ const UsersPage = () => {
   return (
     <>
       {session && (
-        <div className="fixed top-2 right-1">
+        <div className="fixed top-0 right-0 z-50">
           <LogoutBtn />
         </div>
       )}
@@ -183,7 +186,7 @@ const UsersPage = () => {
                             userData={userData}
                             handleSelectStat={handleSelectStat}
                             onHoverLeave={() => handleMouseLeave(userData.id)}
-                            className="absolute top-0 left-0 right-0 w-full transition duration-300"
+                            className="absolute min-h-[300px] h-full top-0 left-0 right-0 w-full transition duration-300"
                           />
                         )}
                       </div>
@@ -200,28 +203,14 @@ const UsersPage = () => {
           <p className="text-gray-400 text-center">Loading more...</p>
         )}
 
+        <ScrollToTop />
+
         {selectedStat && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="fixed top-0 right-0 w-4/6 h-full bg-gray-800 shadow-lg z-50 overflow-auto"
-          >
-            {/* Sticky header */}
-            <div className="sticky top-0 w-full bg-gray-900 p-4 flex justify-between items-center z-50">
-              <h3 className="text-lg font-semibold text-white">{title}</h3>
-              <button
-                className="text-white text-xl"
-                onClick={() => setSelectedStat(null)}
-              >
-                ✖
-              </button>
-            </div>
-            <div className="p-4">
-              <UserStats selectedStat={selectedStat} />
-            </div>
-          </motion.div>
+          <SlideUserStats
+            title={title}
+            selectedStat={selectedStat}
+            setSelectedStat={setSelectedStat}
+          />
         )}
       </div>
     </>
